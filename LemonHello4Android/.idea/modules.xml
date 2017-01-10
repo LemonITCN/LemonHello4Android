@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/LemonHello4Android.iml" filepath="$PROJECT_DIR$/LemonHello4Android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lemonhello/lemonhello.iml" filepath="$PROJECT_DIR$/lemonhello/lemonhello.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lemonhello-samples/lemonhello-samples.iml" filepath="$PROJECT_DIR$/lemonhello-samples/lemonhello-samples.iml" />
+    </modules>
+  </component>
+</project>
