@@ -3,6 +3,7 @@ package net.lemonsoft.lemonhello;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
+import net.lemonsoft.lemonhello.enums.LemonHelloIconLocation;
 import net.lemonsoft.lemonhello.interfaces.LemonPaintContext;
 
 import java.util.List;
@@ -41,11 +42,28 @@ public class LemonHelloInfo {
      */
     private LemonPaintContext iconPaintContext;
     /**
+     * 图标动画是否需要重复
+     */
+    private boolean isIconAnimationRepeat;
+    /**
+     * 动画的执行的所需时长
+     */
+    private int animationTime;
+    /**
      * 对话框的图标对象
      * 如果该对象为空，那么会调用iconPaintContext绘制
      * 如果iconPaintContext为空，那么会认为无图标
      */
     private Bitmap icon;
+    /**
+     * 图标的宽度
+     * 图标为正方形，因此宽度也就是高度
+     */
+    private int iconWidth;
+    /**
+     * 图标的位置描述属性
+     */
+    private LemonHelloIconLocation iconLocation;
     /**
      * 对话框的标题，如果该属性为null或空字符串，那么认为其没有标题
      */
@@ -70,6 +88,10 @@ public class LemonHelloInfo {
      * 对话对征文内容文字字体大小
      */
     private int contentFontSize;
+    /**
+     * 标题的按钮文字大小
+     */
+    private int buttonFontSize;
     /**
      * 对话框的动画list（按钮说明信息list）
      */
@@ -129,12 +151,44 @@ public class LemonHelloInfo {
         this.iconPaintContext = iconPaintContext;
     }
 
+    public boolean isIconAnimationRepeat() {
+        return isIconAnimationRepeat;
+    }
+
+    public void setIconAnimationRepeat(boolean iconAnimationRepeat) {
+        isIconAnimationRepeat = iconAnimationRepeat;
+    }
+
+    public int getAnimationTime() {
+        return animationTime;
+    }
+
+    public void setAnimationTime(int animationTime) {
+        this.animationTime = animationTime;
+    }
+
     public Bitmap getIcon() {
         return icon;
     }
 
     public void setIcon(Bitmap icon) {
         this.icon = icon;
+    }
+
+    public int getIconWidth() {
+        return iconWidth;
+    }
+
+    public void setIconWidth(int iconWidth) {
+        this.iconWidth = iconWidth;
+    }
+
+    public LemonHelloIconLocation getIconLocation() {
+        return iconLocation;
+    }
+
+    public void setIconLocation(LemonHelloIconLocation iconLocation) {
+        this.iconLocation = iconLocation;
     }
 
     public String getTitle() {
@@ -183,6 +237,14 @@ public class LemonHelloInfo {
 
     public void setContentFontSize(int contentFontSize) {
         this.contentFontSize = contentFontSize;
+    }
+
+    public int getButtonFontSize() {
+        return buttonFontSize;
+    }
+
+    public void setButtonFontSize(int buttonFontSize) {
+        this.buttonFontSize = buttonFontSize;
     }
 
     public List<LemonHelloAction> getActions() {
