@@ -1,6 +1,9 @@
 package net.lemonsoft.lemonhello;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.SumPathEffect;
 import android.graphics.drawable.Drawable;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,6 +20,9 @@ import java.util.List;
  */
 
 public class LemonHelloInfo {
+
+    private LemonHelloPrivateAnimationTool _PAT = LemonHelloPrivateAnimationTool.defaultPrivateAnimationTool();
+    private LemonHelloPrivateSizeTool _PST = LemonHelloPrivateSizeTool.getPrivateSizeTool();
 
     /**
      * 对话框控件的宽度
@@ -95,6 +101,14 @@ public class LemonHelloInfo {
      * 标题的按钮文字大小
      */
     private int buttonFontSize = LemonHelloGlobal.buttonFontSize;
+    /**
+     * 控件的内边距
+     */
+    private int padding = LemonHelloGlobal.padding;
+    /**
+     * 控件的间隙
+     */
+    private int space = LemonHelloGlobal.space;
     /**
      * 对话框的动画list（按钮说明信息list）
      */
@@ -284,12 +298,38 @@ public class LemonHelloInfo {
         return this;
     }
 
+    public int getPadding() {
+        return padding;
+    }
+
+    public void setPadding(int padding) {
+        this.padding = padding;
+    }
+
     public List<LemonHelloAction> getActions() {
         return actions;
     }
 
     public LemonHelloInfo setActions(List<LemonHelloAction> actions) {
         this.actions = actions;
+        return this;
+    }
+
+    public LemonHelloInfo addAction(LemonHelloAction... actions) {
+        for (LemonHelloAction action : actions)
+            this.actions.add(action);
+        return this;
+    }
+
+    public LemonHelloInfo removeAction(LemonHelloAction... actions) {
+        for (LemonHelloAction action : actions)
+            if (this.actions.contains(action))
+                this.actions.remove(action);
+        return this;
+    }
+
+    public LemonHelloInfo removeAllActions() {
+        this.actions.clear();
         return this;
     }
 
@@ -334,9 +374,73 @@ public class LemonHelloInfo {
         this.useMessageQueue = useMessageQueue;
     }
 
-    public void calContentPanelFrame(RelativeLayout contentPanel) {
+    private int getTextViewHeight(TextView textView) {
+        Paint.FontMetrics fontMetrics = textView.getPaint().getFontMetrics();
+        return _PST.pxToDp((int) (fontMetrics.descent - fontMetrics.top)) + 2;
     }
 
-    public void calPaintViewAndTitleViewFrame(LemonPaintView paintView, TextView titleView) {
+    /**
+     * 获取textView的文字宽
+     *
+     * @param textView 要查询文字宽的标签控件
+     * @return 获取到的文字宽度数值
+     */
+    private int getTextViewWidth(TextView textView) {
+        return _PST.pxToDp((int) (textView.getPaint().measureText(textView.getText().toString())));
     }
+
+    public void calViewsFrame(RelativeLayout contentPanel,
+                              LemonPaintView paintView,
+                              TextView titleView,
+                              TextView contentView,
+                              RelativeLayout actionContainer) {
+        titleView.setText(title);
+        contentView.setText(content);
+        titleView.setTextSize(titleFontSize);
+        contentView.setTextSize(contentFontSize);
+
+        int panelHeight, titleWidth, titleHeight, contentWidth, contentHeight,
+                titleX, titleY, contentX, contentY, iconX, iconY, actionsY;
+        panelHeight = titleX = titleY = contentX = iconX = iconY = padding;
+
+        titleWidth = width - padding * 2;
+        titleHeight = getTextViewHeight(titleView);
+        contentHeight = getTextViewHeight(contentView);
+        contentWidth = width - padding * 2 - space - iconWidth;
+
+        _PAT.setLocation(titleView, titleX, titleY);
+        _PAT.setSize(titleView, titleWidth, titleHeight);
+
+        switch (iconLocation) {
+            case TOP:
+                iconX = (width - iconWidth) / 2;
+                contentWidth = width - padding * 2;
+                break;
+            case LEFT:
+                iconY = titleY + titleHeight + space;
+                contentX = iconX + iconWidth + space;
+                break;
+            case RIGHT:
+                iconY = titleY + titleHeight + space;
+                break;
+        }
+
+        contentY = titleY + titleHeight + space;
+
+        _PAT.setLocation(paintView, iconX, iconY);
+        _PAT.setSize(paintView, iconWidth, iconWidth);
+        paintView.setBackgroundColor(Color.RED);
+        contentView.setBackgroundColor(Color.BLUE);
+        titleView.setBackgroundColor(Color.GRAY);
+
+
+        _PAT.setSize(contentView, contentWidth, contentHeight);
+        _PAT.setLocation(contentView, contentX, contentY);
+
+        _PAT.setLocation(contentPanel, (_PST.screenWidthDp() - width) / 2, 400);
+        _PAT.setSize(contentPanel, width, 100);
+
+
+    }
+
 }

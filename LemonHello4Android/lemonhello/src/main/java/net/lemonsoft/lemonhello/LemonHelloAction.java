@@ -45,67 +45,103 @@ public class LemonHelloAction {
      */
     private LemonHelloActionDelegate delegate;
 
+    public LemonHelloAction() {
+    }
+
+    public LemonHelloAction(String title, LemonHelloActionDelegate delegate) {
+        this.title = title;
+        this.delegate = delegate;
+    }
+
+    public LemonHelloAction(String title, int titleColor, LemonHelloActionDelegate delegate) {
+        this.title = title;
+        this.titleColor = titleColor;
+        this.delegate = delegate;
+    }
+
+    public LemonHelloAction(String title, int titleColor, int backgroundColor, LemonHelloActionDelegate delegate) {
+        this.title = title;
+        this.titleColor = titleColor;
+        this.backgroundColor = backgroundColor;
+        this.delegate = delegate;
+    }
+
+    public LemonHelloAction(String title, int titleColor, Drawable backgroundDrawable, LemonHelloActionDelegate delegate) {
+        this.title = title;
+        this.titleColor = titleColor;
+        this.backgroundDrawable = backgroundDrawable;
+        this.delegate = delegate;
+    }
+
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public LemonHelloAction setTitle(String title) {
         this.title = title;
+        return this;
     }
 
     public int getBackgroundColor() {
         return backgroundColor;
     }
 
-    public void setBackgroundColor(int backgroundColor) {
+    public LemonHelloAction setBackgroundColor(int backgroundColor) {
         this.backgroundColor = backgroundColor;
+        return this;
     }
 
     public Drawable getBackgroundDrawable() {
         return backgroundDrawable;
     }
 
-    public void setBackgroundDrawable(Drawable backgroundDrawable) {
+    public LemonHelloAction setBackgroundDrawable(Drawable backgroundDrawable) {
         this.backgroundDrawable = backgroundDrawable;
+        return this;
     }
 
     public int getTitleColor() {
         return titleColor;
     }
 
-    public void setTitleColor(int titleColor) {
+    public LemonHelloAction setTitleColor(int titleColor) {
         this.titleColor = titleColor;
+        return this;
     }
 
     public int getBackgroundHoverColor() {
         return backgroundHoverColor;
     }
 
-    public void setBackgroundHoverColor(int backgroundHoverColor) {
+    public LemonHelloAction setBackgroundHoverColor(int backgroundHoverColor) {
         this.backgroundHoverColor = backgroundHoverColor;
+        return this;
     }
 
     public Drawable getBackgroundHoverDrawable() {
         return backgroundHoverDrawable;
     }
 
-    public void setBackgroundHoverDrawable(Drawable backgroundHoverDrawable) {
+    public LemonHelloAction setBackgroundHoverDrawable(Drawable backgroundHoverDrawable) {
         this.backgroundHoverDrawable = backgroundHoverDrawable;
+        return this;
     }
 
     public int getTitleHoverColor() {
         return titleHoverColor;
     }
 
-    public void setTitleHoverColor(int titleHoverColor) {
+    public LemonHelloAction setTitleHoverColor(int titleHoverColor) {
         this.titleHoverColor = titleHoverColor;
+        return this;
     }
 
     public LemonHelloActionDelegate getDelegate() {
         return delegate;
     }
 
-    public void setDelegate(LemonHelloActionDelegate delegate) {
+    public LemonHelloAction setDelegate(LemonHelloActionDelegate delegate) {
         this.delegate = delegate;
+        return this;
     }
 }

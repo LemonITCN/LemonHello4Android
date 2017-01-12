@@ -8,6 +8,7 @@ import net.lemonsoft.lemonhello.enums.LemonHelloIconLocation;
 import net.lemonsoft.lemonhello.interfaces.LemonHelloEventDelegate;
 import net.lemonsoft.lemonhello.interfaces.LemonPaintContext;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ public class LemonHelloGlobal {
     /**
      * 对话框控件的宽度
      */
-    public static int width = 180;
+    public static int width = 260;
     /**
      * 对话框控件的圆角半径
      */
@@ -62,7 +63,7 @@ public class LemonHelloGlobal {
      * 图标的宽度
      * 图标为正方形，因此宽度也就是高度
      */
-    public static int iconWidth = 80;
+    public static int iconWidth = 40;
     /**
      * 图标的位置描述属性
      */
@@ -86,19 +87,19 @@ public class LemonHelloGlobal {
     /**
      * 标题文字的字体大小
      */
-    public static int titleFontSize = 12;
+    public static int titleFontSize = 15;
     /**
      * 对话对征文内容文字字体大小
      */
-    public static int contentFontSize = 14;
+    public static int contentFontSize = 12;
     /**
      * 标题的按钮文字大小
      */
-    public static int buttonFontSize = 13;
+    public static int buttonFontSize = 12;
     /**
      * 对话框的动画list（按钮说明信息list）
      */
-    public static List<LemonHelloAction> actions = null;
+    public static List<LemonHelloAction> actions = new ArrayList<>();
     /**
      * 第一行的按钮数量
      * 如果超过这个数量，那么每一个Action都会被放到单独的行中
@@ -121,5 +122,12 @@ public class LemonHelloGlobal {
      * 是否使用消息队列，若您使用了消息队列，那么后通知显示的消息框会在前一个消息框关闭后再显示
      */
     public static boolean useMessageQueue = true;
-
+    /**
+     * 控件的内边距
+     */
+    public static int padding = 16;
+    /**
+     * 控件的间隙
+     */
+    public static int space = 10;
 }
