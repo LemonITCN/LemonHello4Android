@@ -2,8 +2,11 @@ package net.lemonsoft.lemonhello;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import net.lemonsoft.lemonhello.enums.LemonHelloIconLocation;
+import net.lemonsoft.lemonhello.interfaces.LemonHelloEventDelegate;
 import net.lemonsoft.lemonhello.interfaces.LemonPaintContext;
 
 import java.util.List;
@@ -18,248 +21,322 @@ public class LemonHelloInfo {
     /**
      * 对话框控件的宽度
      */
-    private int width;
+    private int width = LemonHelloGlobal.width;
     /**
      * 对话框控件的圆角半径
      */
-    private int cornerRadius;
+    private int cornerRadius = LemonHelloGlobal.cornerRadius;
     /**
      * 对话框面板的背景颜色
      */
-    private int panelBackgroundColor;
+    private int panelBackgroundColor = LemonHelloGlobal.panelBackgroundColor;
     /**
      * 对话框面板的背景Drawable
      */
-    private Drawable panelBackgroundDrawable;
+    private Drawable panelBackgroundDrawable = LemonHelloGlobal.panelBackgroundDrawable;
     /**
      * 对话框的背景蒙版颜色
      */
-    private int maskColor;
+    private int maskColor = LemonHelloGlobal.maskColor;
     /**
      * 对话框的图标绘制上下文
      * 如果icon属性为空，那么会调用该属性iconPaintContext绘制
      * 如果iconPaintContext为空，那么会认为无图标
      */
-    private LemonPaintContext iconPaintContext;
+    private LemonPaintContext iconPaintContext = LemonHelloGlobal.iconPaintContext;
     /**
      * 图标动画是否需要重复
      */
-    private boolean isIconAnimationRepeat;
+    private boolean isIconAnimationRepeat = LemonHelloGlobal.isIconAnimationRepeat;
     /**
      * 动画的执行的所需时长
      */
-    private int animationTime;
+    private int animationTime = LemonHelloGlobal.animationTime;
     /**
      * 对话框的图标对象
      * 如果该对象为空，那么会调用iconPaintContext绘制
      * 如果iconPaintContext为空，那么会认为无图标
      */
-    private Bitmap icon;
+    private Bitmap icon = LemonHelloGlobal.icon;
     /**
      * 图标的宽度
      * 图标为正方形，因此宽度也就是高度
      */
-    private int iconWidth;
+    private int iconWidth = LemonHelloGlobal.iconWidth;
     /**
      * 图标的位置描述属性
      */
-    private LemonHelloIconLocation iconLocation;
+    private LemonHelloIconLocation iconLocation = LemonHelloGlobal.iconLocation;
     /**
      * 对话框的标题，如果该属性为null或空字符串，那么认为其没有标题
      */
-    private String title;
+    private String title = LemonHelloGlobal.title;
     /**
      * 对话框的正文内容文字
      */
-    private String content;
+    private String content = LemonHelloGlobal.content;
     /**
      * 标题文字的颜色
      */
-    private int titleColor;
+    private int titleColor = LemonHelloGlobal.titleColor;
     /**
      * 对话框正文内容文字颜色
      */
-    private int contentColor;
+    private int contentColor = LemonHelloGlobal.contentColor;
     /**
      * 标题文字的字体大小
      */
-    private int titleFontSize;
+    private int titleFontSize = LemonHelloGlobal.titleFontSize;
     /**
      * 对话对征文内容文字字体大小
      */
-    private int contentFontSize;
+    private int contentFontSize = LemonHelloGlobal.contentFontSize;
     /**
      * 标题的按钮文字大小
      */
-    private int buttonFontSize;
+    private int buttonFontSize = LemonHelloGlobal.buttonFontSize;
     /**
      * 对话框的动画list（按钮说明信息list）
      */
-    private List<LemonHelloAction> actions;
+    private List<LemonHelloAction> actions = LemonHelloGlobal.actions;
     /**
      * 第一行的按钮数量
      * 如果超过这个数量，那么每一个Action都会被放到单独的行中
      * 如果该数值设置为<1的数字，那么认为该值为1
      */
-    private int firstLineButtonCount = 2;
+    private int firstLineButtonCount = LemonHelloGlobal.firstLineButtonCount;
+    /**
+     * 是否显示状态栏
+     */
+    private boolean showStatusBar = LemonHelloGlobal.showStatusBar;
+    /**
+     * 状态栏的颜色
+     */
+    private int statusBarColor = LemonHelloGlobal.statusBarColor;
+    /**
+     * LemonHello的事件代理
+     */
+    private LemonHelloEventDelegate eventDelegate = LemonHelloGlobal.eventDelegate;
+    /**
+     * 是否使用消息队列，若您使用了消息队列，那么后通知显示的消息框会在前一个消息框关闭后再显示
+     */
+    private boolean useMessageQueue = LemonHelloGlobal.useMessageQueue;
 
     public int getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
+    public LemonHelloInfo setWidth(int width) {
         this.width = width;
+        return this;
     }
 
     public int getCornerRadius() {
         return cornerRadius;
     }
 
-    public void setCornerRadius(int cornerRadius) {
+    public LemonHelloInfo setCornerRadius(int cornerRadius) {
         this.cornerRadius = cornerRadius;
+        return this;
     }
 
     public int getPanelBackgroundColor() {
         return panelBackgroundColor;
     }
 
-    public void setPanelBackgroundColor(int panelBackgroundColor) {
+    public LemonHelloInfo setPanelBackgroundColor(int panelBackgroundColor) {
         this.panelBackgroundColor = panelBackgroundColor;
+        return this;
     }
 
     public Drawable getPanelBackgroundDrawable() {
         return panelBackgroundDrawable;
     }
 
-    public void setPanelBackgroundDrawable(Drawable panelBackgroundDrawable) {
+    public LemonHelloInfo setPanelBackgroundDrawable(Drawable panelBackgroundDrawable) {
         this.panelBackgroundDrawable = panelBackgroundDrawable;
+        return this;
     }
 
     public int getMaskColor() {
         return maskColor;
     }
 
-    public void setMaskColor(int maskColor) {
+    public LemonHelloInfo setMaskColor(int maskColor) {
         this.maskColor = maskColor;
+        return this;
     }
 
     public LemonPaintContext getIconPaintContext() {
         return iconPaintContext;
     }
 
-    public void setIconPaintContext(LemonPaintContext iconPaintContext) {
+    public LemonHelloInfo setIconPaintContext(LemonPaintContext iconPaintContext) {
         this.iconPaintContext = iconPaintContext;
+        return this;
     }
 
     public boolean isIconAnimationRepeat() {
         return isIconAnimationRepeat;
     }
 
-    public void setIconAnimationRepeat(boolean iconAnimationRepeat) {
+    public LemonHelloInfo setIconAnimationRepeat(boolean iconAnimationRepeat) {
         isIconAnimationRepeat = iconAnimationRepeat;
+        return this;
     }
 
     public int getAnimationTime() {
         return animationTime;
     }
 
-    public void setAnimationTime(int animationTime) {
+    public LemonHelloInfo setAnimationTime(int animationTime) {
         this.animationTime = animationTime;
+        return this;
     }
 
     public Bitmap getIcon() {
         return icon;
     }
 
-    public void setIcon(Bitmap icon) {
+    public LemonHelloInfo setIcon(Bitmap icon) {
         this.icon = icon;
+        return this;
     }
 
     public int getIconWidth() {
         return iconWidth;
     }
 
-    public void setIconWidth(int iconWidth) {
+    public LemonHelloInfo setIconWidth(int iconWidth) {
         this.iconWidth = iconWidth;
+        return this;
     }
 
     public LemonHelloIconLocation getIconLocation() {
         return iconLocation;
     }
 
-    public void setIconLocation(LemonHelloIconLocation iconLocation) {
+    public LemonHelloInfo setIconLocation(LemonHelloIconLocation iconLocation) {
         this.iconLocation = iconLocation;
+        return this;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public LemonHelloInfo setTitle(String title) {
         this.title = title;
+        return this;
     }
 
     public String getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public LemonHelloInfo setContent(String content) {
         this.content = content;
+        return this;
     }
 
     public int getTitleColor() {
         return titleColor;
     }
 
-    public void setTitleColor(int titleColor) {
+    public LemonHelloInfo setTitleColor(int titleColor) {
         this.titleColor = titleColor;
+        return this;
     }
 
     public int getContentColor() {
         return contentColor;
     }
 
-    public void setContentColor(int contentColor) {
+    public LemonHelloInfo setContentColor(int contentColor) {
         this.contentColor = contentColor;
+        return this;
     }
 
     public int getTitleFontSize() {
         return titleFontSize;
     }
 
-    public void setTitleFontSize(int titleFontSize) {
+    public LemonHelloInfo setTitleFontSize(int titleFontSize) {
         this.titleFontSize = titleFontSize;
+        return this;
     }
 
     public int getContentFontSize() {
         return contentFontSize;
     }
 
-    public void setContentFontSize(int contentFontSize) {
+    public LemonHelloInfo setContentFontSize(int contentFontSize) {
         this.contentFontSize = contentFontSize;
+        return this;
     }
 
     public int getButtonFontSize() {
         return buttonFontSize;
     }
 
-    public void setButtonFontSize(int buttonFontSize) {
+    public LemonHelloInfo setButtonFontSize(int buttonFontSize) {
         this.buttonFontSize = buttonFontSize;
+        return this;
     }
 
     public List<LemonHelloAction> getActions() {
         return actions;
     }
 
-    public void setActions(List<LemonHelloAction> actions) {
+    public LemonHelloInfo setActions(List<LemonHelloAction> actions) {
         this.actions = actions;
+        return this;
     }
 
     public int getFirstLineButtonCount() {
         return Math.max(firstLineButtonCount, 1);
     }
 
-    public void setFirstLineButtonCount(int firstLineButtonCount) {
+    public LemonHelloInfo setFirstLineButtonCount(int firstLineButtonCount) {
         this.firstLineButtonCount = Math.max(firstLineButtonCount, 1);
+        return this;
+    }
+
+    public boolean isShowStatusBar() {
+        return showStatusBar;
+    }
+
+    public void setShowStatusBar(boolean showStatusBar) {
+        this.showStatusBar = showStatusBar;
+    }
+
+    public int getStatusBarColor() {
+        return statusBarColor;
+    }
+
+    public void setStatusBarColor(int statusBarColor) {
+        this.statusBarColor = statusBarColor;
+    }
+
+    public LemonHelloEventDelegate getEventDelegate() {
+        return eventDelegate;
+    }
+
+    public void setEventDelegate(LemonHelloEventDelegate eventDelegate) {
+        this.eventDelegate = eventDelegate;
+    }
+
+    public boolean isUseMessageQueue() {
+        return useMessageQueue;
+    }
+
+    public void setUseMessageQueue(boolean useMessageQueue) {
+        this.useMessageQueue = useMessageQueue;
+    }
+
+    public void calContentPanelFrame(RelativeLayout contentPanel) {
+    }
+
+    public void calPaintViewAndTitleViewFrame(LemonPaintView paintView, TextView titleView) {
     }
 }
