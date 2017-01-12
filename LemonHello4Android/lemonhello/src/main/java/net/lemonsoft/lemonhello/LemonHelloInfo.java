@@ -5,6 +5,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.SumPathEffect;
 import android.graphics.drawable.Drawable;
+import android.text.Layout;
+import android.util.TypedValue;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -109,6 +113,10 @@ public class LemonHelloInfo {
      * 控件的间隙
      */
     private int space = LemonHelloGlobal.space;
+    /**
+     * action按钮的高度
+     */
+    private int actionLineHeight = LemonHelloGlobal.actionLineHeight;
     /**
      * 对话框的动画list（按钮说明信息list）
      */
@@ -306,6 +314,24 @@ public class LemonHelloInfo {
         this.padding = padding;
     }
 
+    public int getSpace() {
+        return space;
+    }
+
+    public LemonHelloInfo setSpace(int space) {
+        this.space = space;
+        return this;
+    }
+
+    public int getActionLineHeight() {
+        return actionLineHeight;
+    }
+
+    public LemonHelloInfo setActionLineHeight(int actionLineHeight) {
+        this.actionLineHeight = actionLineHeight;
+        return this;
+    }
+
     public List<LemonHelloAction> getActions() {
         return actions;
     }
@@ -379,6 +405,13 @@ public class LemonHelloInfo {
         return _PST.pxToDp((int) (fontMetrics.descent - fontMetrics.top)) + 2;
     }
 
+    private int measureTextViewHeight(TextView textView, int viewWidth) {
+        int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(_PST.dpToPx(viewWidth), View.MeasureSpec.AT_MOST);
+        int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        textView.measure(widthMeasureSpec, heightMeasureSpec);
+        return _PST.pxToDp(textView.getMeasuredHeight());
+    }
+
     /**
      * 获取textView的文字宽
      *
@@ -399,13 +432,14 @@ public class LemonHelloInfo {
         titleView.setTextSize(titleFontSize);
         contentView.setTextSize(contentFontSize);
 
+        contentView.setTextSize(contentFontSize);
+
         int panelHeight, titleWidth, titleHeight, contentWidth, contentHeight,
                 titleX, titleY, contentX, contentY, iconX, iconY, actionsY;
         panelHeight = titleX = titleY = contentX = iconX = iconY = padding;
 
         titleWidth = width - padding * 2;
         titleHeight = getTextViewHeight(titleView);
-        contentHeight = getTextViewHeight(contentView);
         contentWidth = width - padding * 2 - space - iconWidth;
 
         _PAT.setLocation(titleView, titleX, titleY);
@@ -425,6 +459,7 @@ public class LemonHelloInfo {
                 break;
         }
 
+        contentHeight = measureTextViewHeight(contentView, contentWidth);
         contentY = titleY + titleHeight + space;
 
         _PAT.setLocation(paintView, iconX, iconY);
@@ -437,8 +472,8 @@ public class LemonHelloInfo {
         _PAT.setSize(contentView, contentWidth, contentHeight);
         _PAT.setLocation(contentView, contentX, contentY);
 
-        _PAT.setLocation(contentPanel, (_PST.screenWidthDp() - width) / 2, 400);
-        _PAT.setSize(contentPanel, width, 100);
+        _PAT.setLocation(contentPanel, (_PST.screenWidthDp() - width) / 2, 200);
+        _PAT.setSize(contentPanel, width, 300);
 
 
     }

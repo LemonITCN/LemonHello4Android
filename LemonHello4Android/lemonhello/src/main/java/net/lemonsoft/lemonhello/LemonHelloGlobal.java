@@ -130,4 +130,8 @@ public class LemonHelloGlobal {
      * 控件的间隙
      */
     public static int space = 10;
+    /**
+     * action按钮的高度
+     */
+    public static int actionLineHeight = 40;
 }
