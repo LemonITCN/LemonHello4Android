@@ -111,6 +111,14 @@ public class LemonHelloAction {
     }
 
     public int getBackgroundHoverColor() {
+        // 先算出原颜色的ARGB值
+        if (backgroundColor != 0 && backgroundHoverColor == 0) {
+            final int a = (backgroundColor & 0xff000000) >>> 24;
+            final int r = Math.max(((backgroundColor & 0x00ff0000) >> 16) - 20, 0);
+            final int g = Math.max(((backgroundColor & 0x0000ff00) >> 8) - 20, 0);
+            final int b = Math.max((backgroundColor & 0x000000ff) - 20, 0);
+            return Color.argb(a, r, g, b);
+        }
         return backgroundHoverColor;
     }
 

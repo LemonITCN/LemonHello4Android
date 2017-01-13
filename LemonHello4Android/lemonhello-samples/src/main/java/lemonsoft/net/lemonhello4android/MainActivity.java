@@ -1,6 +1,7 @@
 package lemonsoft.net.lemonhello4android;
 
 import android.app.Activity;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,6 +11,7 @@ import net.lemonsoft.lemonhello.LemonHelloAction;
 import net.lemonsoft.lemonhello.LemonHelloInfo;
 import net.lemonsoft.lemonhello.LemonHelloView;
 import net.lemonsoft.lemonhello.adapter.LemonHelloEventDelegateAdapter;
+import net.lemonsoft.lemonhello.enums.LemonHelloIconLocation;
 import net.lemonsoft.lemonhello.interfaces.LemonHelloActionDelegate;
 
 public class MainActivity extends Activity {
@@ -23,7 +25,9 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 LemonHelloInfo info = new LemonHelloInfo();
-                info.setTitle("要删除\"LemonKit\"吗?")
+                info.setIconLocation(LemonHelloIconLocation.TOP)
+                        .setIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
+                        .setTitle("要删除\"LemonKit\"吗?")
                         .setContent("删除此应用将同时删除其应用内的所有数据，您确定要删除吗?")
                         .addAction(new LemonHelloAction("取消", new LemonHelloActionDelegate() {
                             @Override
@@ -37,6 +41,12 @@ public class MainActivity extends Activity {
                                 System.out.println("delete");
                             }
                         }))
+//                        .addAction(new LemonHelloAction("我知道了", Color.BLACK, new LemonHelloActionDelegate() {
+//                            @Override
+//                            public void onClick(LemonHelloView helloView, LemonHelloInfo helloInfo, LemonHelloAction helloAction) {
+//                                System.out.println("i known");
+//                            }
+//                        }))
                         .setEventDelegate(new LemonHelloEventDelegateAdapter() {
                             @Override
                             public void onMaskTouch(LemonHelloView helloView, LemonHelloInfo helloInfo) {
@@ -46,6 +56,5 @@ public class MainActivity extends Activity {
                 LemonHelloView.defaultHelloView().showHelloWithInfo(MainActivity.this, info);
             }
         }, 2000);
-
     }
 }
