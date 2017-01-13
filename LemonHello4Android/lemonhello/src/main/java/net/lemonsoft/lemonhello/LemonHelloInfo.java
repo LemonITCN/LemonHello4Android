@@ -426,7 +426,8 @@ public class LemonHelloInfo {
         return _PST.pxToDp((int) (textView.getPaint().measureText(textView.getText().toString())));
     }
 
-    public void calViewsFrame(LemonHelloPanel contentPanel,
+    public void calViewsFrame(final LemonHelloView helloView,
+                              LemonHelloPanel contentPanel,
                               LemonPaintView paintView,
                               TextView titleView,
                               TextView contentView,
@@ -476,16 +477,22 @@ public class LemonHelloInfo {
         panelHeight = actionsY + actionsHeight;
 
         for (int i = 0; i < actions.size(); i++) {
-            LemonHelloAction action = actions.get(i);
+            final LemonHelloAction action = actions.get(i);
             if (actions.size() <= firstLineButtonCount) {
                 // 横向排列
-                TextView actionView = new TextView(actionContainer.getContext());
+                Button actionView = new Button(actionContainer.getContext());
                 actionView.setText(action.getTitle());
                 actionView.setTextColor(action.getTitleColor());
                 actionView.setBackgroundColor(action.getBackgroundColor());
                 actionView.setTextSize(buttonFontSize);
                 actionView.setGravity(Gravity.CENTER);
                 actionContainer.addView(actionView);
+                actionView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        action.getDelegate().onClick(helloView, LemonHelloInfo.this, action);
+                    }
+                });
                 _PAT.setSize(actionView, width / actions.size() - 1, actionLineHeight - 1);
                 _PAT.setLocation(actionView, i * (width / actions.size()), 1);
             } else {

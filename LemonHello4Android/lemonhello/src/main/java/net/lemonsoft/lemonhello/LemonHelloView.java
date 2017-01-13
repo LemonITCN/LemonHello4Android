@@ -241,7 +241,7 @@ public class LemonHelloView {
         // 设置蒙版色
         _PAT.setBackgroundColor(_backMaskView, 0, info.getMaskColor());
         // 调用泡泡控件信息对象中的方法来计算面板和图标标题等控件的位置和大小，并动画移动
-        info.calViewsFrame(_contentPanel, _paintView, _titleView, _contentView, _actionContainer);
+        info.calViewsFrame(LemonHelloView.this, _contentPanel, _paintView, _titleView, _contentView, _actionContainer);
     }
 
 }

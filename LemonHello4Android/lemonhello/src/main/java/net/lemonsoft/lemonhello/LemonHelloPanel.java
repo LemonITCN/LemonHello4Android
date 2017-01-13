@@ -5,9 +5,11 @@ import android.graphics.Canvas;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Region;
+import android.view.MotionEvent;
 import android.widget.RelativeLayout;
 
 /**
+ * LemonHello 面板控件
  * Created by LiuRi on 2017/1/13.
  */
 
@@ -42,5 +44,16 @@ public class LemonHelloPanel extends RelativeLayout {
                 Path.Direction.CW
         );
         canvas.clipPath(path, Region.Op.REPLACE);
+    }
+
+    @Override
+    public boolean onInterceptHoverEvent(MotionEvent event) {
+        return super.onInterceptHoverEvent(event);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        super.onTouchEvent(event);
+        return true;
     }
 }
