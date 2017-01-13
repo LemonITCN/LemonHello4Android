@@ -7,8 +7,10 @@ import android.graphics.SumPathEffect;
 import android.graphics.drawable.Drawable;
 import android.text.Layout;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -226,6 +228,8 @@ public class LemonHelloInfo {
     }
 
     public int getIconWidth() {
+        if (icon == null && iconPaintContext == null)
+            return 0;
         return iconWidth;
     }
 
@@ -422,11 +426,12 @@ public class LemonHelloInfo {
         return _PST.pxToDp((int) (textView.getPaint().measureText(textView.getText().toString())));
     }
 
-    public void calViewsFrame(RelativeLayout contentPanel,
+    public void calViewsFrame(LemonHelloPanel contentPanel,
                               LemonPaintView paintView,
                               TextView titleView,
                               TextView contentView,
                               RelativeLayout actionContainer) {
+        contentPanel.setCornerRadius(cornerRadius);
         titleView.setText(title);
         contentView.setText(content);
         titleView.setTextSize(titleFontSize);
@@ -434,13 +439,13 @@ public class LemonHelloInfo {
 
         contentView.setTextSize(contentFontSize);
 
-        int panelHeight, titleWidth, titleHeight, contentWidth, contentHeight,
+        int panelHeight, titleWidth, titleHeight, contentWidth, contentHeight, actionsHeight,
                 titleX, titleY, contentX, contentY, iconX, iconY, actionsY;
         panelHeight = titleX = titleY = contentX = iconX = iconY = padding;
 
         titleWidth = width - padding * 2;
         titleHeight = getTextViewHeight(titleView);
-        contentWidth = width - padding * 2 - space - iconWidth;
+        contentWidth = width - padding * 2 - (getIconWidth() == 0 ? 0 : space) - getIconWidth();
 
         _PAT.setLocation(titleView, titleX, titleY);
         _PAT.setSize(titleView, titleWidth, titleHeight);
@@ -459,22 +464,51 @@ public class LemonHelloInfo {
                 break;
         }
 
+        if (getIconWidth() <= 0)
+            contentX = padding;
+
         contentHeight = measureTextViewHeight(contentView, contentWidth);
         contentY = titleY + titleHeight + space;
 
-        _PAT.setLocation(paintView, iconX, iconY);
-        _PAT.setSize(paintView, iconWidth, iconWidth);
-        paintView.setBackgroundColor(Color.RED);
-        contentView.setBackgroundColor(Color.BLUE);
-        titleView.setBackgroundColor(Color.GRAY);
+        actionsY = contentY + contentHeight + space * 2;
+        actionsHeight = actions.size() <= firstLineButtonCount ? getActionLineHeight() : getActionLineHeight() * actions.size();
+        actionContainer.setBackgroundColor(Color.argb(30, 150, 150, 150));
+        panelHeight = actionsY + actionsHeight;
 
+        for (int i = 0; i < actions.size(); i++) {
+            LemonHelloAction action = actions.get(i);
+            if (actions.size() <= firstLineButtonCount) {
+                // 横向排列
+                TextView actionView = new TextView(actionContainer.getContext());
+                actionView.setText(action.getTitle());
+                actionView.setTextColor(action.getTitleColor());
+                actionView.setBackgroundColor(action.getBackgroundColor());
+                actionView.setTextSize(buttonFontSize);
+                actionView.setGravity(Gravity.CENTER);
+                actionContainer.addView(actionView);
+                _PAT.setSize(actionView, width / actions.size() - 1, actionLineHeight - 1);
+                _PAT.setLocation(actionView, i * (width / actions.size()), 1);
+            } else {
+                // 纵向排列
+
+            }
+        }
+
+        _PAT.setLocation(paintView, iconX, iconY);
+        _PAT.setSize(paintView, getIconWidth(), getIconWidth());
+
+        _PAT.setSize(actionContainer, width, actionsHeight);
+        _PAT.setLocation(actionContainer, 0, actionsY);
 
         _PAT.setSize(contentView, contentWidth, contentHeight);
         _PAT.setLocation(contentView, contentX, contentY);
 
-        _PAT.setLocation(contentPanel, (_PST.screenWidthDp() - width) / 2, 200);
-        _PAT.setSize(contentPanel, width, 300);
+        _PAT.setLocation(contentPanel, (_PST.screenWidthDp() - width) / 2, (_PST.screenHeightDp() - panelHeight) / 2);
+        _PAT.setSize(contentPanel, width, panelHeight);
 
+//        paintView.setBackgroundColor(Color.RED);
+//        contentView.setBackgroundColor(Color.BLUE);
+//        titleView.setBackgroundColor(Color.GRAY);
 
     }
 

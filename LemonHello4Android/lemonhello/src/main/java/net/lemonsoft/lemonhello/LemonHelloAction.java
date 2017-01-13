@@ -1,5 +1,6 @@
 package net.lemonsoft.lemonhello;
 
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 
 import net.lemonsoft.lemonhello.interfaces.LemonHelloActionDelegate;
@@ -19,15 +20,15 @@ public class LemonHelloAction {
     /**
      * 按钮的背景颜色
      */
-    private int backgroundColor;
+    private int backgroundColor = Color.argb(200, 255, 255, 255);
     /**
      * 背景的Drawable
      */
-    private Drawable backgroundDrawable;
+    private Drawable backgroundDrawable = null;
     /**
      * 标题颜色
      */
-    private int titleColor;
+    private int titleColor = Color.argb(255, 69, 121, 212);
     /**
      * 手指触摸未离开时的按钮背景颜色
      */

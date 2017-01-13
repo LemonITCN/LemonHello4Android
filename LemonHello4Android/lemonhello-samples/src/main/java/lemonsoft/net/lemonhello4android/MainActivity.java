@@ -23,7 +23,7 @@ public class MainActivity extends Activity {
             public void run() {
                 LemonHelloInfo info = new LemonHelloInfo();
                 info.setTitle("要删除\"LemonKit\"吗?")
-                        .setContent("删除此应用讲同事删除其数据删除此应用讲同事删除其数据删除此应用讲同事删除其数据删除此应用讲同事删除其数据删除此应用讲同事删除其数据删除此应用讲同事删除其数据删除此应用讲同事删除其数据删除此应用讲同事删除其数据删除此应用讲同事删除其数据删除此应用讲同事删除其数据删除此应用讲同事删除其数据删除此应用讲同事删除其数据删除此应用讲同事删除其数据删除此应用讲同事删除其数据删除此应用讲同事删除其数据")
+                        .setContent("删除此应用将同时删除其应用内的所有数据，您确定要删除吗?")
                         .addAction(new LemonHelloAction("取消", new LemonHelloActionDelegate() {
                             @Override
                             public void onClick(LemonHelloView helloView, LemonHelloInfo helloInfo, LemonHelloAction helloAction) {

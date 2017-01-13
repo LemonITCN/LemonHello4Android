@@ -42,7 +42,7 @@ public class LemonHelloView {
     // 背景灰色半透明蒙版
     private View _backMaskView;
     // 包含弹出框真正内容的小布局面板
-    private RelativeLayout _contentPanel;
+    private LemonHelloPanel _contentPanel;
     // 动画和帧图片显示的控件
     private LemonPaintView _paintView;
     // 标题显示标签控件
@@ -185,7 +185,7 @@ public class LemonHelloView {
         _rootLayout.setAlpha(0);// 设置全透明，也就是默认不可见，后期通过动画改变来显示
 
         // 实例化内容面板控件
-        _contentPanel = new RelativeLayout(_context);
+        _contentPanel = new LemonHelloPanel(_context);
         _contentPanel.setX(_PST.dpToPx((int) (_PST.screenWidthDp() / 2.0)));
         _contentPanel.setY(_PST.dpToPx((int) (_PST.screenHeightDp() / 2.0)));
 
