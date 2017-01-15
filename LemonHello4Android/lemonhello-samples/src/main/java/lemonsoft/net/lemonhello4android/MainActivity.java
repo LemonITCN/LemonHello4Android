@@ -41,12 +41,6 @@ public class MainActivity extends Activity {
                                 System.out.println("delete");
                             }
                         }))
-//                        .addAction(new LemonHelloAction("我知道了", Color.BLACK, new LemonHelloActionDelegate() {
-//                            @Override
-//                            public void onClick(LemonHelloView helloView, LemonHelloInfo helloInfo, LemonHelloAction helloAction) {
-//                                System.out.println("i known");
-//                            }
-//                        }))
                         .setEventDelegate(new LemonHelloEventDelegateAdapter() {
                             @Override
                             public void onMaskTouch(LemonHelloView helloView, LemonHelloInfo helloInfo) {
