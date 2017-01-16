@@ -530,6 +530,11 @@ public class LemonHelloInfo {
                 _PAT.setLocation(actionView, 0, i * actionLineHeight + 1);
             }
         }
+
+        contentPanel.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx((int) (width * 1.1)), _PST.dpToPx((int) (panelHeight * 1.1))));
+        contentPanel.setX(_PST.dpToPx((int) (_PST.screenWidthDp() / 2 - width * 0.55)));
+        contentPanel.setY(_PST.dpToPx((int) (_PST.screenHeightDp() / 2 - panelHeight * 0.55)));
+
         _PAT.setLocation(titleView, titleX, titleY);
         _PAT.setSize(titleView, titleWidth, titleHeight);
 

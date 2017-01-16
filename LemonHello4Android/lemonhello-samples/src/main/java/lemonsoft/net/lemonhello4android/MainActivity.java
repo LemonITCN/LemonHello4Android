@@ -33,6 +33,7 @@ public class MainActivity extends Activity {
                             @Override
                             public void onClick(LemonHelloView helloView, LemonHelloInfo helloInfo, LemonHelloAction helloAction) {
                                 System.out.println("cancel");
+                                helloView.hide();
                             }
                         }))
                         .addAction(new LemonHelloAction("删除", Color.RED, new LemonHelloActionDelegate() {
