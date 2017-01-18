@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -104,17 +105,26 @@ public class LemonHelloView {
         if (isShow() && _currentInfo.isUseMessageQueue()) {// 当前有对话框正在显示中，并且当前HelloInfo支持队列
             queue.add(new LemonHelloInfoPack(context, helloInfo));
             return;
-        } else if (helloInfo == null && queue.size() > 0) {
+        } else if (context == null && helloInfo == null && queue.size() > 0) {
             // 从队列中读取一个HelloInfo并显示
-
+            LemonHelloInfoPack pack = queue.get(0);
+            queue.remove(0);
+            if (pack.getContext() != null && !pack.getContext().equals(context))
+                haveInit = false;
+            _context = pack.getContext();
+            _currentInfo = pack.getHelloInfo();
+            autoInit(_context);
+            _container.show();
+            initContentPanel(_currentInfo);// 根据泡泡信息对象对正文内容面板进行初始化
         } else {
             // 需要立即将该helloInfo显示出来
             if (_context != null && !_context.equals(context))
                 haveInit = false;
+            _context = context;
             _currentInfo = helloInfo;
-            autoInit(context);
+            autoInit(_context);
             _container.show();
-            initContentPanel(helloInfo);// 根据泡泡信息对象对正文内容面板进行初始化
+            initContentPanel(_currentInfo);// 根据泡泡信息对象对正文内容面板进行初始化
         }
     }
 
@@ -255,6 +265,7 @@ public class LemonHelloView {
         _PAT.setBackgroundColor(_backMaskView, 0, info.getMaskColor());
         // 调用泡泡控件信息对象中的方法来计算面板和图标标题等控件的位置和大小，并动画移动
         info.calViewsFrame(LemonHelloView.this, _contentPanel, _contentLayout, _paintView, _titleView, _contentView, _actionContainer);
+        setIsShow(true);
     }
 
     /**
@@ -282,6 +293,9 @@ public class LemonHelloView {
             @Override
             public void run() {
                 _container.dismiss();
+                setIsShow(false);
+                if (queue.size() > 0)// 展示队列中的下一个提示框
+                    showHelloWithInfo(null, null);
                 haveInit = false;// 让其每次彻底关闭后在开启都重新创建对象，防止部分手机按返回键后再次弹出时候闪退
                 // 如果哪位大神有更好的办法请联系我  liuri@lemonsoft.net
             }

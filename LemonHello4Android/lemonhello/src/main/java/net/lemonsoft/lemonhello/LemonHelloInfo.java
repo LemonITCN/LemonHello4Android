@@ -531,8 +531,10 @@ public class LemonHelloInfo {
 //                _PAT.setLocation(actionView, i * (width / actions.size()), 1);
             } else {
                 // 纵向排列
-                _PAT.setSize(actionView, width, actionLineHeight - 1);
-                _PAT.setLocation(actionView, 0, i * actionLineHeight + 1);
+                actionView.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(width), _PST.dpToPx(actionLineHeight - 1)));
+                actionView.setY(_PST.dpToPx(i * actionLineHeight + 1));
+//                _PAT.setSize(actionView, width, actionLineHeight - 1);
+//                _PAT.setLocation(actionView, 0, i * actionLineHeight + 1);
             }
         }
 

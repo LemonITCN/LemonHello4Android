@@ -51,5 +51,35 @@ public class MainActivity extends Activity {
                 LemonHelloView.defaultHelloView().showHelloWithInfo(MainActivity.this, info);
             }
         }, 2000);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                LemonHelloInfo info = new LemonHelloInfo();
+                info.setIconLocation(LemonHelloIconLocation.TOP)
+                        .setIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
+                        .setTitle("要删除\"LemonKit\"吗?")
+                        .setContent("删除此应用将同时删除其应用内的所有数据，您确定要删除吗?")
+                        .addAction(new LemonHelloAction("取消", new LemonHelloActionDelegate() {
+                            @Override
+                            public void onClick(LemonHelloView helloView, LemonHelloInfo helloInfo, LemonHelloAction helloAction) {
+                                System.out.println("cancel");
+                                helloView.hide();
+                            }
+                        }))
+                        .addAction(new LemonHelloAction("删除", Color.RED, new LemonHelloActionDelegate() {
+                            @Override
+                            public void onClick(LemonHelloView helloView, LemonHelloInfo helloInfo, LemonHelloAction helloAction) {
+                                System.out.println("delete");
+                            }
+                        }))
+                        .setEventDelegate(new LemonHelloEventDelegateAdapter() {
+                            @Override
+                            public void onMaskTouch(LemonHelloView helloView, LemonHelloInfo helloInfo) {
+                                System.out.println("mask touch");
+                            }
+                        });
+                LemonHelloView.defaultHelloView().showHelloWithInfo(MainActivity.this, info);
+            }
+        }, 4000);
     }
 }
