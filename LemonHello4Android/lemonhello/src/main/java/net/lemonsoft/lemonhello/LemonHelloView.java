@@ -44,6 +44,8 @@ public class LemonHelloView {
     private View _backMaskView;
     // 包含弹出框真正内容的小布局面板
     private LemonHelloPanel _contentPanel;
+    // 包含弹出框真正内容的小布局面板的内容layout，之所以再套一层是为了动画效果处理起来方便
+    private RelativeLayout _contentLayout;
     // 动画和帧图片显示的控件
     private LemonPaintView _paintView;
     // 标题显示标签控件
@@ -190,6 +192,9 @@ public class LemonHelloView {
         _contentPanel.setX(_PST.dpToPx((int) (_PST.screenWidthDp() / 2.0)));
         _contentPanel.setY(_PST.dpToPx((int) (_PST.screenHeightDp() / 2.0)));
 
+        // 实例化内容面板控件的布局
+        _contentLayout = new RelativeLayout(_context);
+
         // 实例化绘图动画和帧图片显示的控件
         _paintView = new LemonPaintView(_context);
 
@@ -215,10 +220,11 @@ public class LemonHelloView {
         // 把所有控件添加到根视图上
         _rootLayout.addView(_backMaskView);// 半透明灰色背景
         _rootLayout.addView(_contentPanel);// 主内容面板
-//        _contentPanel.addView(_paintView);// 动画和帧图标显示控件放置到内容面板上
-//        _contentPanel.addView(_titleView);// 标题显示标签控件放置到内容面板上
-//        _contentPanel.addView(_contentView);// 正文内容显示标签控件放到内容面板上
-//        _contentPanel.addView(_actionContainer);// action事件容器放到内容面板中
+        _contentPanel.addView(_contentLayout);
+        _contentLayout.addView(_paintView);// 动画和帧图标显示控件放置到内容面板上
+        _contentLayout.addView(_titleView);// 标题显示标签控件放置到内容面板上
+        _contentLayout.addView(_contentView);// 正文内容显示标签控件放到内容面板上
+        _contentLayout.addView(_actionContainer);// action事件容器放到内容面板中
     }
 
     /**
@@ -248,7 +254,7 @@ public class LemonHelloView {
         // 设置蒙版色
         _PAT.setBackgroundColor(_backMaskView, 0, info.getMaskColor());
         // 调用泡泡控件信息对象中的方法来计算面板和图标标题等控件的位置和大小，并动画移动
-        info.calViewsFrame(LemonHelloView.this, _contentPanel, _paintView, _titleView, _contentView, _actionContainer);
+        info.calViewsFrame(LemonHelloView.this, _contentPanel, _contentLayout, _paintView, _titleView, _contentView, _actionContainer);
     }
 
     /**
@@ -270,6 +276,7 @@ public class LemonHelloView {
         // 把内容面板缩小至屏幕中间
 //        _PAT.setLocation(_contentPanel, _PST.screenWidthDp() / 2, _PST.screenHeightDp() / 2);
         _PAT.setLocation(_contentPanel, _PST.pxToDp((int) (_contentPanel.getX() - _contentPanel.getMeasuredWidth() * 0.05)), _PST.pxToDp((int) (_contentPanel.getY() - _contentPanel.getMeasuredHeight() * 0.05)));
+        _PAT.setLocation(_contentLayout, _PST.pxToDp((int) (_contentPanel.getMeasuredWidth() * 0.05)), _PST.pxToDp((int) (_contentPanel.getMeasuredHeight() * 0.05)));
         setIsShow(false);// 设置当前的状态为不显示状态
         new Handler().postDelayed(new Runnable() {
             @Override

@@ -434,6 +434,7 @@ public class LemonHelloInfo {
      *
      * @param helloView       整个对话框HelloView
      * @param contentPanel    内容面板
+     * @param contentLayout   内容面板的布局
      * @param paintView       图标显示控件
      * @param titleView       标题显示控件
      * @param contentView     内容显示控件
@@ -441,6 +442,7 @@ public class LemonHelloInfo {
      */
     public void calViewsFrame(final LemonHelloView helloView,
                               LemonHelloPanel contentPanel,
+                              RelativeLayout contentLayout,
                               LemonPaintView paintView,
                               TextView titleView,
                               TextView contentView,
@@ -522,8 +524,11 @@ public class LemonHelloInfo {
             });
             if (actions.size() <= firstLineButtonCount) {
                 // 横向排列
-                _PAT.setSize(actionView, width / actions.size() - 1, actionLineHeight - 1);
-                _PAT.setLocation(actionView, i * (width / actions.size()), 1);
+                actionView.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(width / actions.size() - 1), _PST.dpToPx(_PST.dpToPx(actionLineHeight - 1))));
+                actionView.setX(_PST.dpToPx(i * (width / actions.size())));
+                actionView.setY(1);
+//                _PAT.setSize(actionView, width / actions.size() - 1, actionLineHeight - 1);
+//                _PAT.setLocation(actionView, i * (width / actions.size()), 1);
             } else {
                 // 纵向排列
                 _PAT.setSize(actionView, width, actionLineHeight - 1);
@@ -535,17 +540,39 @@ public class LemonHelloInfo {
         contentPanel.setX(_PST.dpToPx((int) (_PST.screenWidthDp() / 2 - width * 0.55)));
         contentPanel.setY(_PST.dpToPx((int) (_PST.screenHeightDp() / 2 - panelHeight * 0.55)));
 
-        _PAT.setLocation(titleView, titleX, titleY);
-        _PAT.setSize(titleView, titleWidth, titleHeight);
+        titleView.setX(_PST.dpToPx(titleX));
+        titleView.setY(_PST.dpToPx(titleY));
+        titleView.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(titleWidth), _PST.dpToPx(titleHeight)));
+//        _PAT.setLocation(titleView, titleX, titleY);
+//        _PAT.setSize(titleView, titleWidth, titleHeight);
 
-        _PAT.setLocation(paintView, iconX, iconY);
-        _PAT.setSize(paintView, getIconWidth(), getIconWidth());
+        paintView.setX(_PST.dpToPx(iconX));
+        paintView.setY(_PST.dpToPx(iconY));
+        paintView.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(getIconWidth()), _PST.dpToPx(getIconWidth())));
+//        _PAT.setLocation(paintView, iconX, iconY);
+//        _PAT.setSize(paintView, getIconWidth(), getIconWidth());
 
-        _PAT.setSize(actionContainer, width, actionsHeight);
-        _PAT.setLocation(actionContainer, 0, actionsY);
+        actionContainer.setX(0);
+        actionContainer.setY(_PST.dpToPx(actionsY));
+        actionContainer.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(width), _PST.dpToPx(actionsHeight)));
+//        _PAT.setSize(actionContainer, width, actionsHeight);
+//        _PAT.setLocation(actionContainer, 0, actionsY);
 
-        _PAT.setSize(contentView, contentWidth, contentHeight);
-        _PAT.setLocation(contentView, contentX, contentY);
+        contentView.setX(_PST.dpToPx(contentX));
+        contentView.setY(_PST.dpToPx(contentY));
+        contentView.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(contentWidth), _PST.dpToPx(contentHeight)));
+
+//        _PAT.setSize(contentView, contentWidth, contentHeight);
+//        _PAT.setLocation(contentView, contentX, contentY);
+
+//        contentPanel.setX(_PST.dpToPx((_PST.screenWidthDp() - width) / 2));
+//        contentPanel.setY((_PST.dpToPx(_PST.screenHeightDp() - panelHeight) / 2));
+//        contentPanel.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(width), _PST.dpToPx(panelHeight)));
+        contentLayout.setX(_PST.dpToPx((int) (width * 0.05)));
+        contentLayout.setY(_PST.dpToPx((int) (panelHeight * 0.05)));
+        contentLayout.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(width), _PST.dpToPx(panelHeight)));
+
+        _PAT.setLocation(contentLayout, 0, 0);
 
         _PAT.setLocation(contentPanel, (_PST.screenWidthDp() - width) / 2, (_PST.screenHeightDp() - panelHeight) / 2);
         _PAT.setSize(contentPanel, width, panelHeight);
