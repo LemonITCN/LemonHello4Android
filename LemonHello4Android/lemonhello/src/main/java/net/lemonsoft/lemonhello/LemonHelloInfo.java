@@ -7,8 +7,11 @@ import android.graphics.SumPathEffect;
 import android.graphics.drawable.Drawable;
 import android.text.Layout;
 import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,7 +19,9 @@ import net.lemonsoft.lemonhello.enums.LemonHelloIconLocation;
 import net.lemonsoft.lemonhello.interfaces.LemonHelloEventDelegate;
 import net.lemonsoft.lemonhello.interfaces.LemonPaintContext;
 
+import java.sql.SQLOutput;
 import java.util.List;
+import java.util.concurrent.BrokenBarrierException;
 
 /**
  * LemonHello - 样式描述信息模型类
@@ -226,6 +231,8 @@ public class LemonHelloInfo {
     }
 
     public int getIconWidth() {
+        if (icon == null && iconPaintContext == null)
+            return 0;
         return iconWidth;
     }
 
@@ -422,11 +429,25 @@ public class LemonHelloInfo {
         return _PST.pxToDp((int) (textView.getPaint().measureText(textView.getText().toString())));
     }
 
-    public void calViewsFrame(RelativeLayout contentPanel,
+    /**
+     * 计算视图的位置等矩形信息
+     *
+     * @param helloView       整个对话框HelloView
+     * @param contentPanel    内容面板
+     * @param contentLayout   内容面板的布局
+     * @param paintView       图标显示控件
+     * @param titleView       标题显示控件
+     * @param contentView     内容显示控件
+     * @param actionContainer 事件按钮容器面板
+     */
+    public void calViewsFrame(final LemonHelloView helloView,
+                              LemonHelloPanel contentPanel,
+                              RelativeLayout contentLayout,
                               LemonPaintView paintView,
                               TextView titleView,
                               TextView contentView,
                               RelativeLayout actionContainer) {
+        contentPanel.setCornerRadius(cornerRadius);
         titleView.setText(title);
         contentView.setText(content);
         titleView.setTextSize(titleFontSize);
@@ -434,47 +455,133 @@ public class LemonHelloInfo {
 
         contentView.setTextSize(contentFontSize);
 
-        int panelHeight, titleWidth, titleHeight, contentWidth, contentHeight,
+        int panelHeight, titleWidth, titleHeight, contentWidth, contentHeight, actionsHeight,
                 titleX, titleY, contentX, contentY, iconX, iconY, actionsY;
         panelHeight = titleX = titleY = contentX = iconX = iconY = padding;
 
         titleWidth = width - padding * 2;
-        titleHeight = getTextViewHeight(titleView);
-        contentWidth = width - padding * 2 - space - iconWidth;
-
-        _PAT.setLocation(titleView, titleX, titleY);
-        _PAT.setSize(titleView, titleWidth, titleHeight);
+        titleHeight = (title == null || title.equals("")) ? 0 : getTextViewHeight(titleView);
+        contentWidth = width - padding * 2 - (getIconWidth() == 0 ? 0 : space) - getIconWidth();
 
         switch (iconLocation) {
             case TOP:
                 iconX = (width - iconWidth) / 2;
                 contentWidth = width - padding * 2;
+                titleY += iconWidth + space;
                 break;
             case LEFT:
                 iconY = titleY + titleHeight + space;
                 contentX = iconX + iconWidth + space;
                 break;
             case RIGHT:
+                iconX = width - padding - getIconWidth();
                 iconY = titleY + titleHeight + space;
                 break;
         }
 
-        contentHeight = measureTextViewHeight(contentView, contentWidth);
+        if (getIconWidth() <= 0)
+            contentX = padding;
+
+        contentHeight = (content == null || content.equals("")) ? 0 : measureTextViewHeight(contentView, contentWidth);
+        if (contentHeight < getIconWidth() && iconLocation != LemonHelloIconLocation.TOP)// 内容高小于图标的高
+            contentHeight = getIconWidth();
         contentY = titleY + titleHeight + space;
 
-        _PAT.setLocation(paintView, iconX, iconY);
-        _PAT.setSize(paintView, iconWidth, iconWidth);
-        paintView.setBackgroundColor(Color.RED);
-        contentView.setBackgroundColor(Color.BLUE);
-        titleView.setBackgroundColor(Color.GRAY);
+        actionsY = contentY + contentHeight + space * 2;
+        actionsHeight = actions.size() <= firstLineButtonCount ? getActionLineHeight() : getActionLineHeight() * actions.size();
+        actionContainer.setBackgroundColor(Color.argb(30, 150, 150, 150));
+        panelHeight = actionsY + actionsHeight;
 
+        for (int i = 0; i < actions.size(); i++) {
+            final LemonHelloAction action = actions.get(i);
+            Button actionView = new Button(actionContainer.getContext());
+            actionView.setText(action.getTitle());
+            actionView.setTextColor(action.getTitleColor());
+            actionView.setBackgroundColor(action.getBackgroundColor());
+            actionView.setTextSize(buttonFontSize);
+            actionView.setGravity(Gravity.CENTER);
+            actionContainer.addView(actionView);
+            actionView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    action.getDelegate().onClick(helloView, LemonHelloInfo.this, action);
+                }
+            });
+            actionView.setOnTouchListener(new View.OnTouchListener() {
+                // 设置触摸监听器，设置触摸的颜色变化
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            v.setBackgroundColor(action.getBackgroundHoverColor());
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            v.setBackgroundColor(action.getBackgroundColor());
+                            break;
+                    }
+                    return false;
+                }
+            });
+            if (actions.size() <= firstLineButtonCount) {
+                // 横向排列
+                actionView.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(width / actions.size() - 1), _PST.dpToPx(_PST.dpToPx(actionLineHeight - 1))));
+                actionView.setX(_PST.dpToPx(i * (width / actions.size())));
+                actionView.setY(1);
+//                _PAT.setSize(actionView, width / actions.size() - 1, actionLineHeight - 1);
+//                _PAT.setLocation(actionView, i * (width / actions.size()), 1);
+            } else {
+                // 纵向排列
+                actionView.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(width), _PST.dpToPx(actionLineHeight - 1)));
+                actionView.setY(_PST.dpToPx(i * actionLineHeight + 1));
+//                _PAT.setSize(actionView, width, actionLineHeight - 1);
+//                _PAT.setLocation(actionView, 0, i * actionLineHeight + 1);
+            }
+        }
 
-        _PAT.setSize(contentView, contentWidth, contentHeight);
-        _PAT.setLocation(contentView, contentX, contentY);
+        contentPanel.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx((int) (width * 1.1)), _PST.dpToPx((int) (panelHeight * 1.1))));
+        contentPanel.setX(_PST.dpToPx((int) (_PST.screenWidthDp() / 2 - width * 0.55)));
+        contentPanel.setY(_PST.dpToPx((int) (_PST.screenHeightDp() / 2 - panelHeight * 0.55)));
 
-        _PAT.setLocation(contentPanel, (_PST.screenWidthDp() - width) / 2, 200);
-        _PAT.setSize(contentPanel, width, 300);
+        titleView.setX(_PST.dpToPx(titleX));
+        titleView.setY(_PST.dpToPx(titleY));
+        titleView.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(titleWidth), _PST.dpToPx(titleHeight)));
+//        _PAT.setLocation(titleView, titleX, titleY);
+//        _PAT.setSize(titleView, titleWidth, titleHeight);
 
+        paintView.setX(_PST.dpToPx(iconX));
+        paintView.setY(_PST.dpToPx(iconY));
+        paintView.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(getIconWidth()), _PST.dpToPx(getIconWidth())));
+//        _PAT.setLocation(paintView, iconX, iconY);
+//        _PAT.setSize(paintView, getIconWidth(), getIconWidth());
+
+        actionContainer.setX(0);
+        actionContainer.setY(_PST.dpToPx(actionsY));
+        actionContainer.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(width), _PST.dpToPx(actionsHeight)));
+//        _PAT.setSize(actionContainer, width, actionsHeight);
+//        _PAT.setLocation(actionContainer, 0, actionsY);
+
+        contentView.setX(_PST.dpToPx(contentX));
+        contentView.setY(_PST.dpToPx(contentY));
+        contentView.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(contentWidth), _PST.dpToPx(contentHeight)));
+
+//        _PAT.setSize(contentView, contentWidth, contentHeight);
+//        _PAT.setLocation(contentView, contentX, contentY);
+
+//        contentPanel.setX(_PST.dpToPx((_PST.screenWidthDp() - width) / 2));
+//        contentPanel.setY((_PST.dpToPx(_PST.screenHeightDp() - panelHeight) / 2));
+//        contentPanel.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(width), _PST.dpToPx(panelHeight)));
+        contentLayout.setX(_PST.dpToPx((int) (width * 0.05)));
+        contentLayout.setY(_PST.dpToPx((int) (panelHeight * 0.05)));
+        contentLayout.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(width), _PST.dpToPx(panelHeight)));
+
+        _PAT.setLocation(contentLayout, 0, 0);
+
+        _PAT.setLocation(contentPanel, (_PST.screenWidthDp() - width) / 2, (_PST.screenHeightDp() - panelHeight) / 2);
+        _PAT.setSize(contentPanel, width, panelHeight);
+
+//        paintView.setBackgroundColor(Color.LTGRAY);
+//        contentView.setBackgroundColor(Color.BLUE);
+//        titleView.setBackgroundColor(Color.GRAY);
 
     }
 

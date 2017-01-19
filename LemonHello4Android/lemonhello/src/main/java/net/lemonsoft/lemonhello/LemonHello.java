@@ -6,4 +6,9 @@ package net.lemonsoft.lemonhello;
  */
 
 public class LemonHello {
+
+    public void showInfo(String info){
+        
+    }
+
 }

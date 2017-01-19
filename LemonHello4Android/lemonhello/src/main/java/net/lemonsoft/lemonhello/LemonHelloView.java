@@ -4,12 +4,14 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -42,7 +44,9 @@ public class LemonHelloView {
     // 背景灰色半透明蒙版
     private View _backMaskView;
     // 包含弹出框真正内容的小布局面板
-    private RelativeLayout _contentPanel;
+    private LemonHelloPanel _contentPanel;
+    // 包含弹出框真正内容的小布局面板的内容layout，之所以再套一层是为了动画效果处理起来方便
+    private RelativeLayout _contentLayout;
     // 动画和帧图片显示的控件
     private LemonPaintView _paintView;
     // 标题显示标签控件
@@ -101,17 +105,26 @@ public class LemonHelloView {
         if (isShow() && _currentInfo.isUseMessageQueue()) {// 当前有对话框正在显示中，并且当前HelloInfo支持队列
             queue.add(new LemonHelloInfoPack(context, helloInfo));
             return;
-        } else if (helloInfo == null && queue.size() > 0) {
+        } else if (context == null && helloInfo == null && queue.size() > 0) {
             // 从队列中读取一个HelloInfo并显示
-
+            LemonHelloInfoPack pack = queue.get(0);
+            queue.remove(0);
+            if (pack.getContext() != null && !pack.getContext().equals(context))
+                haveInit = false;
+            _context = pack.getContext();
+            _currentInfo = pack.getHelloInfo();
+            autoInit(_context);
+            _container.show();
+            initContentPanel(_currentInfo);// 根据泡泡信息对象对正文内容面板进行初始化
         } else {
             // 需要立即将该helloInfo显示出来
             if (_context != null && !_context.equals(context))
                 haveInit = false;
+            _context = context;
             _currentInfo = helloInfo;
-            autoInit(context);
+            autoInit(_context);
             _container.show();
-            initContentPanel(helloInfo);// 根据泡泡信息对象对正文内容面板进行初始化
+            initContentPanel(_currentInfo);// 根据泡泡信息对象对正文内容面板进行初始化
         }
     }
 
@@ -185,9 +198,12 @@ public class LemonHelloView {
         _rootLayout.setAlpha(0);// 设置全透明，也就是默认不可见，后期通过动画改变来显示
 
         // 实例化内容面板控件
-        _contentPanel = new RelativeLayout(_context);
+        _contentPanel = new LemonHelloPanel(_context);
         _contentPanel.setX(_PST.dpToPx((int) (_PST.screenWidthDp() / 2.0)));
         _contentPanel.setY(_PST.dpToPx((int) (_PST.screenHeightDp() / 2.0)));
+
+        // 实例化内容面板控件的布局
+        _contentLayout = new RelativeLayout(_context);
 
         // 实例化绘图动画和帧图片显示的控件
         _paintView = new LemonPaintView(_context);
@@ -207,13 +223,18 @@ public class LemonHelloView {
         _actionContainer.setX(0);
         _actionContainer.setY(0);
 
+        _contentView.setAlpha(0);
+        _titleView.setAlpha(0);
+        _contentPanel.setAlpha(0);
+
         // 把所有控件添加到根视图上
         _rootLayout.addView(_backMaskView);// 半透明灰色背景
         _rootLayout.addView(_contentPanel);// 主内容面板
-        _contentPanel.addView(_paintView);// 动画和帧图标显示控件放置到内容面板上
-        _contentPanel.addView(_titleView);// 标题显示标签控件放置到内容面板上
-        _contentPanel.addView(_contentView);// 正文内容显示标签控件放到内容面板上
-        _contentPanel.addView(_actionContainer);// action事件容器放到内容面板中
+        _contentPanel.addView(_contentLayout);
+        _contentLayout.addView(_paintView);// 动画和帧图标显示控件放置到内容面板上
+        _contentLayout.addView(_titleView);// 标题显示标签控件放置到内容面板上
+        _contentLayout.addView(_contentView);// 正文内容显示标签控件放到内容面板上
+        _contentLayout.addView(_actionContainer);// action事件容器放到内容面板中
     }
 
     /**
@@ -237,11 +258,55 @@ public class LemonHelloView {
         _PAT.setBackgroundColor(_contentPanel, info.getCornerRadius(), info.getPanelBackgroundColor());
         // 设置内容面板的透明度为1，不透明
         _PAT.setAlpha(_contentPanel, 1);
+        _PAT.setAlpha(_contentView, 1);
+        _PAT.setAlpha(_titleView, 1);
         _titleView.setTextColor(info.getTitleColor());
         // 设置蒙版色
         _PAT.setBackgroundColor(_backMaskView, 0, info.getMaskColor());
         // 调用泡泡控件信息对象中的方法来计算面板和图标标题等控件的位置和大小，并动画移动
-        info.calViewsFrame(_contentPanel, _paintView, _titleView, _contentView, _actionContainer);
+        info.calViewsFrame(LemonHelloView.this, _contentPanel, _contentLayout, _paintView, _titleView, _contentView, _actionContainer);
+        setIsShow(true);
     }
 
+    /**
+     * 隐藏当前正在显示的泡泡控件
+     */
+    public void hide() {
+        _PAT.setAlpha(_rootLayout, 0);// 动画设置根视图不透明
+        _PAT.setAlpha(_contentPanel, 0);// 动画设置内容面板不透明
+        _PAT.setSize(_contentPanel, _PST.pxToDp((int) (_contentPanel.getMeasuredWidth() * 1.1f)), _PST.pxToDp((int) (_contentPanel.getMeasuredHeight() * 1.1)));// 动画设置面板的大小为0，0
+//        _PAT.setSize(_paintView, 0, 0);// 动画设置图标动画控件的大小为0，0
+//        _PAT.setSize(_titleView, 0, 0);// 动画设置标题控件的大小为0，0
+//        _PAT.setSize(_contentView, 0, 0);
+        _PAT.setAlpha(_contentView, -5);
+        _PAT.setAlpha(_paintView, -5);
+        _PAT.setAlpha(_titleView, -5);
+//        _PAT.setLocation(_paintView, 0, 0);// 动画设置图标动画控件的坐标为0，0，可以让动画看起来更像是整体缩小
+//        _PAT.setLocation(_titleView, 0, 0);// 动画设置标题控件的坐标为0，0，可以让动画看起来更像是整体缩小
+//        _PAT.setLocation(_contentView, 0, 0);
+        // 把内容面板缩小至屏幕中间
+//        _PAT.setLocation(_contentPanel, _PST.screenWidthDp() / 2, _PST.screenHeightDp() / 2);
+        _PAT.setLocation(_contentPanel, _PST.pxToDp((int) (_contentPanel.getX() - _contentPanel.getMeasuredWidth() * 0.05)), _PST.pxToDp((int) (_contentPanel.getY() - _contentPanel.getMeasuredHeight() * 0.05)));
+        _PAT.setLocation(_contentLayout, _PST.pxToDp((int) (_contentPanel.getMeasuredWidth() * 0.05)), _PST.pxToDp((int) (_contentPanel.getMeasuredHeight() * 0.05)));
+        setIsShow(false);// 设置当前的状态为不显示状态
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                _container.dismiss();
+                setIsShow(false);
+                if (queue.size() > 0)// 展示队列中的下一个提示框
+                    showHelloWithInfo(null, null);
+                haveInit = false;// 让其每次彻底关闭后在开启都重新创建对象，防止部分手机按返回键后再次弹出时候闪退
+                // 如果哪位大神有更好的办法请联系我  liuri@lemonsoft.net
+            }
+        }, 300);// 待所有动画处理完毕后关闭根Dialog
+    }
+
+    /**
+     * 强制关闭当前正在显示的泡泡控件
+     */
+    public void forceHide() {
+        _container.dismiss();
+        this.haveInit = false;
+    }
 }

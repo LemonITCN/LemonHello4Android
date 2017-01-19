@@ -30,7 +30,7 @@ public class LemonHelloGlobal {
     /**
      * 对话框面板的背景颜色
      */
-    public static int panelBackgroundColor = Color.argb(200, 255, 255, 255);
+    public static int panelBackgroundColor = Color.argb(245, 255, 255, 255);
     /**
      * 对话框面板的背景Drawable
      */
@@ -95,7 +95,7 @@ public class LemonHelloGlobal {
     /**
      * 标题的按钮文字大小
      */
-    public static int buttonFontSize = 12;
+    public static int buttonFontSize = 14;
     /**
      * 对话框的动画list（按钮说明信息list）
      */
