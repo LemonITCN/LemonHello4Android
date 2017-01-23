@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
         sButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LemonHello.getWarningInfo("要删除\"LemonKit\"吗?", "您选择删除后会同时删除应用内的所有数据，确认删除吗？")
+                LemonHello.getSuccessHello("要删除\"LemonKit\"吗?", "您选择删除后会同时删除应用内的所有数据，确认删除吗？")
                         .setIconWidth(80)
                         .addAction(new LemonHelloAction("取消", Color.argb(255, 0, 120, 215), new LemonHelloActionDelegate() {
                             @Override
