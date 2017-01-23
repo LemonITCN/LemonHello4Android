@@ -52,7 +52,7 @@ public class LemonHelloGlobal {
     /**
      * 动画的执行的所需时长
      */
-    public static int animationTime = 2000;
+    public static int animationTime = 400;
     /**
      * 对话框的图标对象
      * 如果该对象为空，那么会调用iconPaintContext绘制
@@ -96,10 +96,6 @@ public class LemonHelloGlobal {
      * 标题的按钮文字大小
      */
     public static int buttonFontSize = 14;
-    /**
-     * 对话框的动画list（按钮说明信息list）
-     */
-    public static List<LemonHelloAction> actions = new ArrayList<>();
     /**
      * 第一行的按钮数量
      * 如果超过这个数量，那么每一个Action都会被放到单独的行中

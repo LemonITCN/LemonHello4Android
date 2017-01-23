@@ -1,5 +1,6 @@
 package net.lemonsoft.lemonhello;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -20,6 +21,7 @@ import net.lemonsoft.lemonhello.interfaces.LemonHelloEventDelegate;
 import net.lemonsoft.lemonhello.interfaces.LemonPaintContext;
 
 import java.sql.SQLOutput;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
 
@@ -125,7 +127,7 @@ public class LemonHelloInfo {
     /**
      * 对话框的动画list（按钮说明信息list）
      */
-    private List<LemonHelloAction> actions = LemonHelloGlobal.actions;
+    private List<LemonHelloAction> actions = new ArrayList<>();
     /**
      * 第一行的按钮数量
      * 如果超过这个数量，那么每一个Action都会被放到单独的行中
@@ -488,10 +490,12 @@ public class LemonHelloInfo {
         contentY = titleY + titleHeight + space;
 
         actionsY = contentY + contentHeight + space * 2;
-        actionsHeight = actions.size() <= firstLineButtonCount ? getActionLineHeight() : getActionLineHeight() * actions.size();
+        actionsHeight = actions.size() <= 0 ? 0 :
+                actions.size() <= firstLineButtonCount ?
+                        getActionLineHeight() :
+                        getActionLineHeight() * actions.size();
         actionContainer.setBackgroundColor(Color.argb(30, 150, 150, 150));
         panelHeight = actionsY + actionsHeight;
-
         for (int i = 0; i < actions.size(); i++) {
             final LemonHelloAction action = actions.get(i);
             Button actionView = new Button(actionContainer.getContext());
@@ -527,14 +531,10 @@ public class LemonHelloInfo {
                 actionView.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(width / actions.size() - 1), _PST.dpToPx(_PST.dpToPx(actionLineHeight - 1))));
                 actionView.setX(_PST.dpToPx(i * (width / actions.size())));
                 actionView.setY(1);
-//                _PAT.setSize(actionView, width / actions.size() - 1, actionLineHeight - 1);
-//                _PAT.setLocation(actionView, i * (width / actions.size()), 1);
             } else {
                 // 纵向排列
                 actionView.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(width), _PST.dpToPx(actionLineHeight - 1)));
                 actionView.setY(_PST.dpToPx(i * actionLineHeight + 1));
-//                _PAT.setSize(actionView, width, actionLineHeight - 1);
-//                _PAT.setLocation(actionView, 0, i * actionLineHeight + 1);
             }
         }
 
@@ -545,31 +545,19 @@ public class LemonHelloInfo {
         titleView.setX(_PST.dpToPx(titleX));
         titleView.setY(_PST.dpToPx(titleY));
         titleView.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(titleWidth), _PST.dpToPx(titleHeight)));
-//        _PAT.setLocation(titleView, titleX, titleY);
-//        _PAT.setSize(titleView, titleWidth, titleHeight);
 
         paintView.setX(_PST.dpToPx(iconX));
         paintView.setY(_PST.dpToPx(iconY));
         paintView.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(getIconWidth()), _PST.dpToPx(getIconWidth())));
-//        _PAT.setLocation(paintView, iconX, iconY);
-//        _PAT.setSize(paintView, getIconWidth(), getIconWidth());
 
         actionContainer.setX(0);
         actionContainer.setY(_PST.dpToPx(actionsY));
         actionContainer.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(width), _PST.dpToPx(actionsHeight)));
-//        _PAT.setSize(actionContainer, width, actionsHeight);
-//        _PAT.setLocation(actionContainer, 0, actionsY);
 
         contentView.setX(_PST.dpToPx(contentX));
         contentView.setY(_PST.dpToPx(contentY));
         contentView.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(contentWidth), _PST.dpToPx(contentHeight)));
 
-//        _PAT.setSize(contentView, contentWidth, contentHeight);
-//        _PAT.setLocation(contentView, contentX, contentY);
-
-//        contentPanel.setX(_PST.dpToPx((_PST.screenWidthDp() - width) / 2));
-//        contentPanel.setY((_PST.dpToPx(_PST.screenHeightDp() - panelHeight) / 2));
-//        contentPanel.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(width), _PST.dpToPx(panelHeight)));
         contentLayout.setX(_PST.dpToPx((int) (width * 0.05)));
         contentLayout.setY(_PST.dpToPx((int) (panelHeight * 0.05)));
         contentLayout.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx(width), _PST.dpToPx(panelHeight)));
@@ -579,10 +567,10 @@ public class LemonHelloInfo {
         _PAT.setLocation(contentPanel, (_PST.screenWidthDp() - width) / 2, (_PST.screenHeightDp() - panelHeight) / 2);
         _PAT.setSize(contentPanel, width, panelHeight);
 
-//        paintView.setBackgroundColor(Color.LTGRAY);
-//        contentView.setBackgroundColor(Color.BLUE);
-//        titleView.setBackgroundColor(Color.GRAY);
+    }
 
+    public void show(Context context) {
+        LemonHelloView.defaultHelloView().showHelloWithInfo(context, this);
     }
 
 }
