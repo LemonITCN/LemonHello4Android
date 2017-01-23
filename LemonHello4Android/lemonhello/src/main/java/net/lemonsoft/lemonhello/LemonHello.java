@@ -15,6 +15,13 @@ import net.lemonsoft.lemonhello.interfaces.LemonPaintContext;
 
 public class LemonHello {
 
+    /**
+     * 获取一个带有橘黄色主题的感叹号!提示框
+     *
+     * @param title   提示的标题内容
+     * @param content 提示的正文内容
+     * @return 提示框信息描述对象
+     */
     public static LemonHelloInfo getWarningHello(String title, String content) {
         LemonHelloInfo info = new LemonHelloInfo();
         info.setIconLocation(LemonHelloIconLocation.TOP)
@@ -52,6 +59,13 @@ public class LemonHello {
         return info;
     }
 
+    /**
+     * 获取一个带有蓝色主题的信息i提示框
+     *
+     * @param title   提示的标题内容
+     * @param content 提示的正文内容
+     * @return 提示框信息描述对象
+     */
     public static LemonHelloInfo getInformationHello(String title, String content) {
         LemonHelloInfo info = new LemonHelloInfo();
         info.setIconLocation(LemonHelloIconLocation.TOP)
@@ -85,6 +99,13 @@ public class LemonHello {
         return info;
     }
 
+    /**
+     * 获取一个带有红色主题的错X号提示框
+     *
+     * @param title   提示的标题内容
+     * @param content 提示的正文内容
+     * @return 提示框信息描述对象
+     */
     public static LemonHelloInfo getErrorHello(String title, String content) {
         LemonHelloInfo info = new LemonHelloInfo();
         info.setIconLocation(LemonHelloIconLocation.TOP)
@@ -115,6 +136,13 @@ public class LemonHello {
         return info;
     }
 
+    /**
+     * 获取一个带有绿色主题的对号提示框
+     *
+     * @param title   提示的标题内容
+     * @param content 提示的正文内容
+     * @return 提示框信息描述对象
+     */
     public static LemonHelloInfo getSuccessHello(String title, String content) {
         LemonHelloInfo info = new LemonHelloInfo();
         info.setIconLocation(LemonHelloIconLocation.TOP)
