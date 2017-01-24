@@ -389,24 +389,27 @@ public class LemonHelloInfo {
         return statusBarColor;
     }
 
-    public void setStatusBarColor(int statusBarColor) {
+    public LemonHelloInfo setStatusBarColor(int statusBarColor) {
         this.statusBarColor = statusBarColor;
+        return this;
     }
 
     public LemonHelloEventDelegate getEventDelegate() {
         return eventDelegate;
     }
 
-    public void setEventDelegate(LemonHelloEventDelegate eventDelegate) {
+    public LemonHelloInfo setEventDelegate(LemonHelloEventDelegate eventDelegate) {
         this.eventDelegate = eventDelegate;
+        return this;
     }
 
     public boolean isUseMessageQueue() {
         return useMessageQueue;
     }
 
-    public void setUseMessageQueue(boolean useMessageQueue) {
+    public LemonHelloInfo setUseMessageQueue(boolean useMessageQueue) {
         this.useMessageQueue = useMessageQueue;
+        return this;
     }
 
     private int getTextViewHeight(TextView textView) {

@@ -15,10 +15,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import net.lemonsoft.lemonbubble.LemonBubble;
+import net.lemonsoft.lemonbubble.LemonBubbleGlobal;
 import net.lemonsoft.lemonbubble.enums.LemonBubbleLayoutStyle;
 import net.lemonsoft.lemonbubble.enums.LemonBubbleLocationStyle;
 import net.lemonsoft.lemonhello.LemonHello;
 import net.lemonsoft.lemonhello.LemonHelloAction;
+import net.lemonsoft.lemonhello.LemonHelloGlobal;
 import net.lemonsoft.lemonhello.LemonHelloInfo;
 import net.lemonsoft.lemonhello.LemonHelloView;
 import net.lemonsoft.lemonhello.adapter.LemonHelloEventDelegateAdapter;
@@ -43,6 +45,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        LemonHelloGlobal.statusBarColor = Color.parseColor("#3399FF");
+        LemonBubbleGlobal.statusBarColor = Color.parseColor("#3399FF");
 
         btn_success = (LinearLayout) findViewById(R.id.btn_success);
         btn_error = (LinearLayout) findViewById(R.id.btn_error);
@@ -154,9 +159,9 @@ public class MainActivity extends Activity {
                                 LemonBubble.getRoundProgressBubbleInfo()
                                         .setLocationStyle(LemonBubbleLocationStyle.BOTTOM)
                                         .setLayoutStyle(LemonBubbleLayoutStyle.ICON_LEFT_TITLE_RIGHT)
-                                        .setBubbleSize(140, 50)
+                                        .setBubbleSize(200, 50)
                                         .setProportionOfDeviation(0.1f)
-                                        .setTitle("正在请求服务器..")
+                                        .setTitle("正在请求服务器...")
                                         .show(MainActivity.this);
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
