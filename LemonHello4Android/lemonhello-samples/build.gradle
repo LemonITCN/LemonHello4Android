@@ -26,4 +26,5 @@ dependencies {
     })
     testCompile 'junit:junit:4.12'
     compile project(':lemonhello')
+    compile 'com.github.1em0nsOft:LemonBubble4Android:1.0.9'
 }
