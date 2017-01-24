@@ -539,8 +539,14 @@ public class LemonHelloInfo {
         }
 
         contentPanel.setLayoutParams(new RelativeLayout.LayoutParams(_PST.dpToPx((int) (width * 1.1)), _PST.dpToPx((int) (panelHeight * 1.1))));
-        contentPanel.setX(_PST.dpToPx((int) (_PST.screenWidthDp() / 2 - width * 0.55)));
-        contentPanel.setY(_PST.dpToPx((int) (_PST.screenHeightDp() / 2 - panelHeight * 0.55)));
+        contentPanel.setX(_PST.dpToPx((int) (_PST.screenWidthDp() / 2 - width / 2)));
+        contentPanel.setY(_PST.dpToPx((int) (_PST.screenHeightDp() / 2 - panelHeight / 2)));
+
+        // 使用下面这种特效会让窗口有点颤抖，暂不明原因，待考究
+//        contentPanel.setX(_PST.dpToPx((int) (_PST.screenWidthDp() / 2 - width * 0.55)));
+//        contentPanel.setY(_PST.dpToPx((int) (_PST.screenHeightDp() / 2 - panelHeight * 0.55)));
+
+        _PAT.setLocation(contentPanel, (_PST.screenWidthDp() - width) / 2, (_PST.screenHeightDp() - panelHeight) / 2);
 
         titleView.setX(_PST.dpToPx(titleX));
         titleView.setY(_PST.dpToPx(titleY));
@@ -564,7 +570,6 @@ public class LemonHelloInfo {
 
         _PAT.setLocation(contentLayout, 0, 0);
 
-        _PAT.setLocation(contentPanel, (_PST.screenWidthDp() - width) / 2, (_PST.screenHeightDp() - panelHeight) / 2);
         _PAT.setSize(contentPanel, width, panelHeight);
 
     }
