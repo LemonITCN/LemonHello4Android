@@ -142,7 +142,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/btn_custom"
+            android:id="@+id/btn_multiMessages"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
@@ -155,14 +155,14 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
-                android:src="@mipmap/icon_warning" />
+                android:src="@mipmap/icon_messages" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:gravity="center_horizontal"
-                android:text="自定义对话框"
+                android:text="多个对话框"
                 android:textSize="10dp" />
         </LinearLayout>
 
