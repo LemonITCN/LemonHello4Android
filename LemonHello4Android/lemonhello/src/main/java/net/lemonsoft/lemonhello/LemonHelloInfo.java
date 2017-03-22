@@ -381,8 +381,9 @@ public class LemonHelloInfo {
         return showStatusBar;
     }
 
-    public void setShowStatusBar(boolean showStatusBar) {
+    public LemonHelloInfo setShowStatusBar(boolean showStatusBar) {
         this.showStatusBar = showStatusBar;
+        return this;
     }
 
     public int getStatusBarColor() {

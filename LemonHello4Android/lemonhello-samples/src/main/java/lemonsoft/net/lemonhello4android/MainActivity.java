@@ -88,12 +88,20 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 LemonHello.getSuccessHello("提交成功", "恭喜您，您所填写的数据已经全部提交成功，我们的客服人员将在24小时内进行审核，请耐心等待.")
+                        .setContentFontSize(14)
                         .addAction(new LemonHelloAction("我知道啦", new LemonHelloActionDelegate() {
                             @Override
                             public void onClick(LemonHelloView helloView, LemonHelloInfo helloInfo, LemonHelloAction helloAction) {
                                 helloView.hide();
                             }
                         }))
+                        .setEventDelegate(new LemonHelloEventDelegateAdapter() {
+                            @Override
+                            public void onMaskTouch(LemonHelloView helloView, LemonHelloInfo helloInfo) {
+                                super.onMaskTouch(helloView, helloInfo);
+                                helloView.hide();
+                            }
+                        })
                         .show(MainActivity.this);
             }
         });
