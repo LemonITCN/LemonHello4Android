@@ -18,7 +18,7 @@
 
 - 怎么样，别光看，我们不妨试试看哦！把LemonHello集成到你的项目中很简单，使用Gradle，首先在你的Project build.gradle文件中（allprojects ->repositories节点）加入如下代码：
 
-```
+``` gradle
 allprojects {
     repositories {
         jcenter()
@@ -30,7 +30,7 @@ allprojects {
 
 接下来，在你的项目中的Module（xxx e.g:app） build.gradle中（dependencies节点）加入如下代码：
 
-```
+``` gradle
 dependencies {
     // ...  你的其他依赖
     // 然后加入下面这行
@@ -42,7 +42,7 @@ dependencies {
 
 接下来，我们验证一下我们是否集成成功，随便找一个Activity，在onCreate方法里面我们加上如下一段代码来弹出一个对话框试试：
 
-```
+``` java
 LemonHello.getSuccessHello("提示", "恭喜您，集成成功！")
       .addAction(new LemonHelloAction("我知道啦", new LemonHelloActionDelegate() {
            @Override
@@ -59,7 +59,7 @@ LemonHello.getSuccessHello("提示", "恭喜您，集成成功！")
 
 LemonBubble默认带了四中样式，就如我们开头展示的动画里面的前四种，不过呢，你可以自定义其他样式，都可以自定义什么属性呢？给大家列一个列表：
 
-```
+``` java
 // 对话框控件的宽度
 width;
     
